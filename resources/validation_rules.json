@@ -1,0 +1,122 @@
+{
+  "Demand": {
+    "file": "Demand",
+    "column": "demand_qty",
+    "rules": [
+      {
+        "rule_id": "D001",
+        "type": "NOT_NULL",
+        "description": "Demand must not be null",
+        "severity": "High"
+      },
+      {
+        "rule_id": "D002",
+        "type": "POSITIVE",
+        "description": "Demand must be greater than zero",
+        "severity": "High"
+      }
+    ]
+  },
+
+  "Capacity": {
+    "file": "Capacity",
+    "column": "capacity",
+    "rules": [
+      {
+        "rule_id": "C001",
+        "type": "NOT_NULL",
+        "description": "Capacity must not be null",
+        "severity": "High"
+      },
+      {
+        "rule_id": "C002",
+        "type": "POSITIVE",
+        "description": "Capacity must be greater than zero",
+        "severity": "High"
+      }
+    ]
+  },
+
+  "Group": {
+    "rules": [
+      {
+        "rule_id": "G001",
+        "type": "EXISTS_IN",
+        "description": "Demand Item must exist in Group",
+        "severity": "Medium",
+        "source_file": "Demand",
+        "source_column": "item",
+        "target_file": "Group",
+        "target_column": "item"
+      }
+    ]
+  },
+
+  "GroupLocation": {
+    "file": "GroupLocation",
+    "column": "location",
+    "rules": [
+      {
+        "rule_id": "GL001",
+        "type": "NOT_NULL",
+        "description": "Group must be mapped to Location",
+        "severity": "Medium"
+      }
+    ]
+  },
+
+  "GroupResource": {
+    "file": "GroupResource",
+    "column": "resource",
+    "rules": [
+      {
+        "rule_id": "GR001",
+        "type": "NOT_NULL",
+        "description": "Group must be mapped to Resource",
+        "severity": "Medium"
+      }
+    ]
+  },
+
+  "Routing": {
+    "file": "Routing",
+    "column": "routing_id",
+    "rules": [
+      {
+        "rule_id": "RR001",
+        "type": "NOT_NULL",
+        "description": "Routing must exist",
+        "severity": "Medium"
+      }
+    ]
+  },
+
+  "TransitionLoss": {
+    "file": "TransitionLoss",
+    "column": "transition_loss_hours",
+    "rules": [
+      {
+        "rule_id": "TL001",
+        "type": "NOT_NULL",
+        "description": "Transition Loss must not be null",
+        "severity": "High"
+      },
+      {
+        "rule_id": "TL002",
+        "type": "POSITIVE",
+        "description": "Transition Loss must be greater than zero",
+        "severity": "High"
+      },
+      {
+        "rule_id": "TL003",
+        "type": "ALL_COMBINATIONS_EXIST",
+        "description": "Transition Loss must exist between all Group combinations",
+        "severity": "High",
+        "master_file": "Group",
+        "master_column": "group_id",
+        "from_column": "from_group",
+        "to_column": "to_group"
+      }
+    ]
+  }
+}

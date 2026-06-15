@@ -1,0 +1,4 @@
+api_key: ${API_KEY}
+azure_endpoint: ${AZURE_ENDPOINT}
+api_version: ${API_VERSION}
+ai_model: ${AI_MODEL}
