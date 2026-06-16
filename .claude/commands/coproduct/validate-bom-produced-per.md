@@ -87,19 +87,23 @@ In the Excel file, scan rows beyond the product list section to find the Scenari
 
 ```
 ratio = MULTIPACK Productivity Kg/shift ÷ SLUG Productivity Kg/shift
-expected_ratio = round(ratio, 1)
+expected_ratio = truncate(ratio, 2)  — take the raw value as-is to 2 decimal places; do NOT round
 ```
+
+To truncate to 2 decimal places without rounding: `int(ratio * 100) / 100`
 
 **3d. Compare**
 
 ```
-actual_value = round(o9 BOM Quantity Produced Per, 1)
+actual_value = truncate(o9 BOM Quantity Produced Per, 2)  — take the raw value as-is to 2 decimal places; do NOT round
 ```
+
+To truncate to 2 decimal places without rounding: `int(value * 100) / 100`
 
 If `actual_value` ≠ `expected_ratio`:
 - FAIL:
   - `validation`: `"BOM Ratio Match"`
-  - `actual_value`: the actual BOM value (rounded to 1 decimal)
+  - `actual_value`: the actual BOM value (truncated to 2 decimal places, not rounded)
   - `expected`: `"o9 BOM Quantity Produced Per should be {expected_ratio} (Multipack {multipack_val} ÷ Slug {slug_val})"`
 
 ---
@@ -116,6 +120,7 @@ If `actual_value` ≠ `expected_ratio`:
 * Continue validation even if some records fail.
 * Do not ask questions.
 * Do not request clarification.
+* **Do not round off any numeric value.** All numeric values must be taken as-is, truncated to 2 decimal places. Use truncation (`int(value * 100) / 100`), never `round()`.
 
 ---
 
@@ -147,8 +152,8 @@ Example:
     "slug_sku": "SKU_00324",
     "validation": "BOM Ratio Match",
     "status": "FAIL",
-    "actual_value": "1.0",
-    "expected": "o9 BOM Quantity Produced Per should be 4.6 (Multipack 4184.9 ÷ Slug 918.6)"
+    "actual_value": "1.00",
+    "expected": "o9 BOM Quantity Produced Per should be 4.55 (Multipack 4184.89 ÷ Slug 918.63)"
   }
 ]
 ```
@@ -169,6 +174,6 @@ Column rules:
 * o9 BOM Association — PASS or FAIL. Use N/A if Co-Product in BOM is FAIL.
 * o9 BOM Qty Produced Per — PASS or FAIL. Use N/A if Co-Product in BOM is FAIL.
 * BOM Ratio Match — PASS or FAIL. Use N/A if any Validation 1 check failed.
-* Expected Ratio — the calculated ratio rounded to 1 decimal, or N/A if not reached.
-* Actual BOM Value — the o9 BOM Quantity Produced Per rounded to 1 decimal, or N/A if not reached.
+* Expected Ratio — the calculated ratio truncated to 2 decimal places (not rounded), or N/A if not reached.
+* Actual BOM Value — the o9 BOM Quantity Produced Per truncated to 2 decimal places (not rounded), or N/A if not reached.
 * Overall — FAIL if any column is FAIL, otherwise PASS.

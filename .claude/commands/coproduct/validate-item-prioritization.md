@@ -109,7 +109,9 @@ After the JSON array, output a markdown table under the heading:
 
 ## Validation Summary
 
-One row per SKU with these columns:
+Include only rows where Overall is FAIL. Do not include PASS rows.
+
+One row per failing SKU with these columns:
 
 | Line | SKU | Type | Line Exists | CoProduct Enabled | SKU Exists | Priority Populated | Mother Child Priority | Overall |
 
@@ -120,3 +122,4 @@ Column rules:
 * Mother Child Priority — show PASS if all Child-Mother comparisons for that SKU passed,
   FAIL if any failed, N/A for Mother SKUs or if validation was stopped.
 * Overall — FAIL if any column is FAIL, otherwise PASS.
+* If no SKUs fail, output: "No validation failures found."
