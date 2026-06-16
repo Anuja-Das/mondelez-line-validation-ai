@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 import pandas as pd
 
 
@@ -16,8 +17,14 @@ class DataLoader:
 
             file_stem = config.get("file", parameter)
 
-            datasets[parameter] = pd.read_csv(
-                f"data/{file_stem}.csv"
-            )
+            for ext, reader in [(".csv", pd.read_csv), (".xlsx", pd.read_excel)]:
+                path = Path("data") / f"{file_stem}{ext}"
+                if path.exists():
+                    datasets[parameter] = reader(path)
+                    break
+            else:
+                raise FileNotFoundError(
+                    f"No CSV or XLSX file found for '{parameter}' in data/"
+                )
 
         return datasets

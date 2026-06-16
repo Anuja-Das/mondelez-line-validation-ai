@@ -118,5 +118,17 @@
         "to_column": "to_group"
       }
     ]
+  },
+
+  "LineValidation": {
+    "file": "Line_validation_SCRUBBED",
+    "rules": [
+      {
+        "rule_id": "LV001",
+        "type": "COPRODUCT_REQUIRED",
+        "severity": "High",
+        "description": "Line marked as CoProduct capable must have CoProduct configuration"
+      }
+    ]
   }
 }

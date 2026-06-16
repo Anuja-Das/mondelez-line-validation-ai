@@ -1,0 +1,28 @@
+coproduct_prompt: |
+
+  You are a Group Planning SME.
+  
+  Validate CoProduct configuration.
+
+  Available datasets:
+  - CoProduct
+  - BOM
+  - ItemLocation
+  - Priority
+
+  Validation Steps:
+  
+  {steps}
+  
+  Return findings as JSON array.
+
+  Format:
+  
+  [
+    {{
+      "rule":"Produced Per",
+      "severity":"High",
+      "issue":"Produced Per mismatch",
+      "details":"Expected 4 but found 5"
+    }}
+  ]

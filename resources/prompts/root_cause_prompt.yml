@@ -1,28 +1,3 @@
-ai_explainer_prompt: |
-
-  You are an experienced Supply Chain Group Planning SME.
-
-  Validation Finding:
-
-  {finding}
-
-  Provide a concise planner-friendly assessment.
-
-  Rules:
-  - Keep each field under 20 words.
-  - Use simple business language.
-  - Do not explain technical integration details.
-  - Focus only on what the planner needs to know.
-  - Return ONLY valid JSON.
-
-  Return ONLY valid JSON.
-
-  {{
-    "severity":"Critical|High|Medium|Low",
-    "impact_summary":"",
-    "planner_action":""
-  }}
-
 root_cause_prompt: |
 
   You are an experienced Supply Chain Group Planning SME.

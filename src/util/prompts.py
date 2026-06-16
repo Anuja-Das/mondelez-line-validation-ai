@@ -1,10 +1,12 @@
 import yaml
 from pathlib import Path
 
-PROMPTS_PATH = Path(__file__).resolve().parents[2] / "resources" / "prompts.yml"
+_PROMPTS_DIR = Path(__file__).resolve().parents[2] / "resources" / "prompts"
 
-with open(PROMPTS_PATH, "r", encoding="utf-8") as _f:
-    _prompts = yaml.safe_load(_f) or {}
+_prompts = {}
+for _yml in _PROMPTS_DIR.glob("*.yml"):
+    with open(_yml, "r", encoding="utf-8") as _f:
+        _prompts.update(yaml.safe_load(_f) or {})
 
 
 def get_prompt(name):
