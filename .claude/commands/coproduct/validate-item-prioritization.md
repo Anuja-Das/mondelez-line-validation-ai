@@ -10,32 +10,32 @@ Input Files
 
 Validation Scope
 
-1. Read Rows 7-13 from List of products_Plant_Location_Rates - line 2_New.xlsx.
+1. Open List of products_Plant_Location_Rates - line 2_New.xlsx and identify the sheet to read.
 
 2. Extract:
 
-    * Line
-    * SKU
-    * Type (Mother or Child)
+    * Line ← use the sheet name as the Line identifier
+    * SKU ← from rows 7–13 within that sheet
+    * Type (Mother or Child) ← from rows 7–13 within that sheet
 
 3. Validate Line Exists
 
-    * Line must exist in Line_validation_SCRUBBED.xlsx.
+    * Line must exist in the Line Validation dataset.
 
 4. Validate CoProduct Enabled
 
-    * Use Coproduct column from Line_validation_SCRUBBED.xlsx.
+    * Use the Coproduct column to determine if CoProduct is enabled.
     * Only value "Y" means enabled.
     * Any other value means disabled.
     * If disabled, stop validation for that SKU.
 
 5. Validate SKU Exists
 
-    * SKU must exist in Fact.ItemPrioritization SCRUBBED.csv.
+    * SKU must exist in the Item Prioritization dataset.
 
 6. Validate Priority Populated
 
-    * Priority value is mentioned in MDLZ_Mother Child Item Priority column in Fact.ItemPrioritization SCRUBBED.csv.
+    * Check the MDLZ_Mother Child Item Priority column.
     * Priority value must not be blank, NULL, or missing.
 
 7. Validate Mother Child Priority
@@ -71,7 +71,11 @@ General Rules
 
 Output
 
-Return ONLY a JSON array.
+Return a JSON array followed by a markdown summary table.
+
+Step 1 — JSON Array
+
+Include only FAIL findings. Do not include PASS records.
 
 Each finding must contain:
 
@@ -80,7 +84,7 @@ Each finding must contain:
 "sku":"",
 "type":"",
 "validation":"",
-"status":"PASS|FAIL",
+"status":"FAIL",
 "actual_value":"",
 "expected":""
 }
@@ -90,20 +94,29 @@ Example
 [
 {
 "line":"LINE_B",
-"sku":"SKU_1001",
-"type":"Child",
-"validation":"SKU Exists",
-"status":"PASS",
-"actual_value":"SKU_1001",
-"expected":"SKU must exist in Item Prioritization"
-},
-{
-"line":"LINE_B",
 "sku":"SKU_1002",
 "type":"Mother",
 "validation":"Priority Populated",
 "status":"FAIL",
 "actual_value":"",
-"expected":"Priority must be populated"
+"expected":"MDLZ_Mother Child Item Priority must be populated"
 }
 ]
+
+Step 2 — Validation Summary Table
+
+After the JSON array, output a markdown table under the heading:
+
+## Validation Summary
+
+One row per SKU with these columns:
+
+| Line | SKU | Type | Line Exists | CoProduct Enabled | SKU Exists | Priority Populated | Mother Child Priority | Overall |
+
+Column rules:
+
+* Line Exists, CoProduct Enabled, SKU Exists, Priority Populated — show PASS or FAIL.
+  Use N/A if the validation was not reached because CoProduct was disabled.
+* Mother Child Priority — show PASS if all Child-Mother comparisons for that SKU passed,
+  FAIL if any failed, N/A for Mother SKUs or if validation was stopped.
+* Overall — FAIL if any column is FAIL, otherwise PASS.
